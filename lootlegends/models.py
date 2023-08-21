@@ -30,9 +30,9 @@ class Post(models.Model):
     date_posted = models.DateTimeField()
 
 class PostMedia(models.Model):
-    user = models.ForeignKey(User)
-    media = models.ForeignKey(Media)
-    post = models.ForeignKey(Post)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    media = models.ForeignKey(Media, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
 class Genre(models.Model):
     genre_type = models.CharField(max_length=100)
@@ -55,21 +55,21 @@ class Game(models.Model):
     )
 
 class UserFavoriteGames(models.Model):
-    user = models.ForeignKey(User)
-    game = models.ForeignKey(Game)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    game = models.ForeignKey(Game, on_delete=models.PROTECT)
 
 class GameGenre(models.Model):
-    game = models.ForeignKey(Game)
-    genre = models.ForeignKey(Genre)
+    game = models.ForeignKey(Game, on_delete=models.PROTECT)
+    genre = models.ForeignKey(Genre, on_delete=models.PROTECT)
 
 class GamePost(models.Model):
-    game = models.ForeignKey(Game)
-    post = models.ForeignKey(Post)
-    user = models.ForeignKey(User)
+    game = models.ForeignKey(Game, on_delete=models.PROTECT)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class ProfilePicture(models.Model):
-    user_id = models.ForeignKey(User)
-    media_id = models.ForeignKey(Media)
+    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+    media_id = models.ForeignKey(Media, on_delete=models.PROTECT)
 
 
 
