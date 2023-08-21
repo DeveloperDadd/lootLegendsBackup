@@ -30,6 +30,7 @@ class Post(models.Model):
     date_posted = models.DateTimeField()
 
 class PostMedia(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
