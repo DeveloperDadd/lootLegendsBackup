@@ -31,7 +31,22 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = CustomUserSerializer
 
 
-@api_view(['GET'])
-def userList(request):
-    users = CustomUser.objects.all()
-    serializer = CustomUserSerializer(users, many = True)
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all();
+    serializer_class = CustomUserSerializer;
+
+class MediaViewSet(viewsets.ModelViewSet):
+    queryset = Media.objects.all();
+    serializer_class = MediaSerializer;
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Media.objects.all();
+    serializer_class = PostSerializer;
+
+class GenreViewSet(viewsets.ModelViewSet):
+    queryset = Genre.objects.all();
+    serializer_class = GenreSerializer;
+
+class GameViewSet(viewsets.ModelViewSet):
+    queryset = Game.objects.all();
+    serializer_class = GameSerializer;

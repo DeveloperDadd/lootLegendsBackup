@@ -37,7 +37,7 @@ class PostSerializer(serializers.ModelSerializer):
         model: Post
         fields ='__all__'
 
-class GenreSerializer(serializers.ModelSerializer):
+class GenreSerializers(serializers.ModelSerializer):
     class Meta:
         model: Genre
         fields = '__all__'
