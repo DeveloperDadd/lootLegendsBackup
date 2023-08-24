@@ -88,7 +88,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'lootlegends'
+    'lootlegends',
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
