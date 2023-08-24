@@ -7,11 +7,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from .models import *
-from .serializers import *
+from .serializers import * 
 from django.db.models import Sum
-
-
-
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 class UserCreate(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -30,3 +29,9 @@ class UserDetail(generics.RetrieveAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+
+
+@api_view(['GET'])
+def userList(request):
+    users = CustomUser.objects.all()
+    serializer = CustomUserSerializer(users, many = True)
