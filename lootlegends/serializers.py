@@ -24,26 +24,34 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CustomUser
         fields = '__all__'
 
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
-        model: Media
+        model = Media
         fields = '__all__'
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
-        model: Post
+        model = Post
         fields ='__all__'
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
-        model: Genre
+        model = Genre
         fields = '__all__'
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
-        model: Game
+        model = Game
         fields = '__all__'
+
+class UserFavoriteGamesSerializer(serializers.ModelSerializer):
+    games = GameSerializer(many=True, read_only=True)
+    class Meta: 
+        model = UserFavoriteGames
+        fields = '__all__'
+
+
 

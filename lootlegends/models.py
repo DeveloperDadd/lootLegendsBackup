@@ -6,18 +6,10 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
-    
-class User(models.Model):
-    username = models.CharField(max_length=16)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.CharField(max_length=100)
-    password = models.CharField(max_length=16)
-    date_registered = models.DateTimeField()
 
 class Media(models.Model):
     user_id = models.ManyToManyField(
-        User,
+        CustomUser,
         through="PostMedia"
     )
     type = models.IntegerField()
@@ -25,12 +17,12 @@ class Media(models.Model):
     date_uploaded = models.DateTimeField()
 
 class Post(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     post_text = models.CharField(max_length=140)
     date_posted = models.DateTimeField()
 
 class PostMedia(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
@@ -41,10 +33,12 @@ class Game(models.Model):
     game_title = models.CharField(max_length=255)
     rawg_id = models.IntegerField()
     user = models.ManyToManyField(
-        User,
+        CustomUser,
         through="UserFavoriteGames"
     )
-    game_cover_art = models.CharField()
+    game_image_url = models.CharField(max_length = 1000, default="")
+    game_rating = models.CharField(max_length=20, default="...")
+    game_description = models.CharField(max_length = 255, default="This should be here")
     posts = models.ManyToManyField(
         Post,
         through="GamePost"
@@ -55,7 +49,7 @@ class Game(models.Model):
     )
 
 class UserFavoriteGames(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
     game = models.ForeignKey(Game, on_delete=models.PROTECT)
 
 class GameGenre(models.Model):
@@ -65,10 +59,10 @@ class GameGenre(models.Model):
 class GamePost(models.Model):
     game = models.ForeignKey(Game, on_delete=models.PROTECT)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 class ProfilePicture(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+    user_id = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
     media_id = models.ForeignKey(Media, on_delete=models.PROTECT)
 
 

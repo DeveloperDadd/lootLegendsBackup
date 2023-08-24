@@ -4,9 +4,7 @@ from rest_framework import routers
 from .views import *
 
 
-# 
 router = routers.DefaultRouter()
-
 router.register(r'game', GameViewSet)
 router.register(r'media', MediaViewSet)
 router.register(r'genre', GenreViewSet)
@@ -18,4 +16,5 @@ urlpatterns = [
     path('users/<int:pk>/', UserDetail.as_view(), name="get_user_details"),
     path('user/login/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('add-to-favorites/', views.favorite_game, name="favorite-game" ),
 ]
