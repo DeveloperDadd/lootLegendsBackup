@@ -1,12 +1,16 @@
 from django.urls import path, include
 from rest_framework_simplejwt import views as jwt_views
 from rest_framework import routers
-from .views import * 
+from .views import *
 
 
 # 
 router = routers.DefaultRouter()
-# router.register(r'user/<int:pk>/posts/', )
+
+router.register(r'game', GameViewSet)
+router.register(r'media', MediaViewSet)
+router.register(r'genre', GenreViewSet)
+router.register(r'post', PostViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -10,7 +10,7 @@ from .models import *
 from .serializers import * 
 from django.db.models import Sum
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
+
 
 class UserCreate(APIView):
     permission_classes = (permissions.AllowAny,)
