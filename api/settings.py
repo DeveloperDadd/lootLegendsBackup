@@ -68,7 +68,10 @@ if APPENGINE_URL:
     SECURE_SSL_REDIRECT = True
 else:
     CSRF_TRUSTED_ORIGINS = ['http://localhost', 'https://*.gitpod.io']
-    CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOW_ALL_ORIGINS = False
+    CORS_ORIGIN_WHITELIST =(
+        'http://localhost:3000',
+        )
 
 ALLOWED_HOSTS = ['*']
 

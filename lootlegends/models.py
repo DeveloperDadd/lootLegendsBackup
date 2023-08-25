@@ -38,7 +38,6 @@ class Game(models.Model):
     )
     game_image_url = models.CharField(max_length = 1000, default="")
     game_rating = models.CharField(max_length=20, default="...")
-    game_description = models.CharField(max_length = 255, default="This should be here")
     posts = models.ManyToManyField(
         Post,
         through="GamePost"

@@ -17,5 +17,5 @@ urlpatterns = [
     path('users/<int:pk>/', UserDetail.as_view(), name="get_user_details"),
     path('user/login/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('add-to-favorites/', views.favorite_game),
+    path('add-to-favorites/', views.add_favorite_game, name="add-to-favorites"),
 ]

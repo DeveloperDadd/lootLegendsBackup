@@ -14,6 +14,7 @@ from corsheaders.middleware import CorsMiddleware
 from django.views.decorators.http import require_POST
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+import json
 
 class UserCreate(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -55,17 +56,39 @@ class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer;
 
 @api_view(['POST'])
-def favorite_game(request, game_id):
-    user = request.user
-    game = get_object_or_404(Game, id=game_id)
+def add_favorite_game(request):
+   try:
+        user = request.user
+        game_id = request.data.get('rawg_id')
 
-    if request.method == 'POST':
-        if UserFavoriteGames.objects.filter(user=user, game=game).exists():
-            return Response({'message':'Game is already in favorites'}, status=status.HTTP_400_BAD_REQUEST)
+        existing_favorite=UserFavoriteGames.objects.filter(user=user, game_id=game_id).first()
+
+        if existing_favorite:
+            return Response({'detail':'Game already in favorites.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        game = Game.objects.get(pk=rawg_id)
+        user_favorite_game = UserFavoriteGames(user=user, game=game)
+        user_favorite_game.save()
+
+        return Response({'detail':'Game added to favorites'}, status=status.HTTP_201_CREATED)
+   except Exception as e:
+        return Response({'detail':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+   
+    # user = request.user
+    # games = Game.objects.all()
+    # serializer = UserFavoriteGamesSerializer(games, many=True)
+    # return Response(serializer.data)
+
+    # if Game.objects.filter(rawg_id=game):
+    #     UserFavoriteGames.objects.create(game=game, user=user)
+    #     return Response({'message':'Game added to favorites'})
+    # elif Game.objects.filter(id != game):
+    #     Game.objects.create(request.data)
+    #     UserFavoriteGames.objects.create(game=game, user=user)
+    # elif UserFavoriteGames.objects.filter(game=game):
+    #     UserFavoriteGames.objects.delete(game=game)
+    #     return Response({'message': 'Game was unfavorited'})
     
-        favorite = UserFavoriteGames(user=user, game=game)
-        favorite.save()
-        return Response({'message': 'Game added to favorites'}, status=status.HTTP_201_CREATED)
     
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
