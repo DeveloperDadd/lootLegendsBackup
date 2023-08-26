@@ -56,10 +56,20 @@ class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer;
 
 
-@api_view(['POST', 'DELETE'])
+@api_view(['POST'])
 def add_favorite_game(request):
     user = request.user #Getting user id sent from the frontend and setting it equal to user
     rawg_id = request.data.get("rawg_id") #Getting the rawg_id sent from the 3rd party API and setting it equal to rawg_id
+    game_data = request.data
+
+    game = Game.objects.filter(rawg_id__exact=rawg_id)
+    if not game:
+        game_serializer = GameSerializer(data=game_data)
+        if game_serializer.is_valid():
+            game_instance = game_serializer.save()
+            game = game_instance.
+
+    userfavorite
 
     try:
         game = Game.objects.filter(rawg_id=rawg_id) #Checking to see if the Game model has a matching record where rawg_id equals the rawg_id from the frontend
