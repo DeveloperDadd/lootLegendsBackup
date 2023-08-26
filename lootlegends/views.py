@@ -55,40 +55,29 @@ class GameViewSet(viewsets.ModelViewSet):
     queryset = Game.objects.all();
     serializer_class = GameSerializer;
 
-@api_view(['POST'])
+
+@api_view(['POST', 'DELETE'])
 def add_favorite_game(request):
-   try:
-        user = request.user
-        game_id = request.data.get('rawg_id')
+    user = request.user #Getting user id sent from the frontend and setting it equal to user
+    rawg_id = request.data.get("rawg_id") #Getting the rawg_id sent from the 3rd party API and setting it equal to rawg_id
 
-        existing_favorite=UserFavoriteGames.objects.filter(user=user, game_id=game_id).first()
+    try:
+        game = Game.objects.filter(rawg_id=rawg_id) #Checking to see if the Game model has a matching record where rawg_id equals the rawg_id from the frontend
+    except Game.DoesNotExist: # If the game doesn't exist do the below:
+        game = Game.objects.create(request.data) #Create a new record in the Game model equal to the data sent from the frontend
+        game.save() #save it to the Game model 
 
-        if existing_favorite:
-            return Response({'detail':'Game already in favorites.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        game = Game.objects.get(pk=rawg_id)
-        user_favorite_game = UserFavoriteGames(user=user, game=game)
-        user_favorite_game.save()
-
-        return Response({'detail':'Game added to favorites'}, status=status.HTTP_201_CREATED)
-   except Exception as e:
-        return Response({'detail':str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-   
-    # user = request.user
-    # games = Game.objects.all()
-    # serializer = UserFavoriteGamesSerializer(games, many=True)
-    # return Response(serializer.data)
-
-    # if Game.objects.filter(rawg_id=game):
-    #     UserFavoriteGames.objects.create(game=game, user=user)
-    #     return Response({'message':'Game added to favorites'})
-    # elif Game.objects.filter(id != game):
-    #     Game.objects.create(request.data)
-    #     UserFavoriteGames.objects.create(game=game, user=user)
-    # elif UserFavoriteGames.objects.filter(game=game):
-    #     UserFavoriteGames.objects.delete(game=game)
-    #     return Response({'message': 'Game was unfavorited'})
-    
+    try:
+        user_favorite_game = UserFavoriteGames.objects.filter(game=rawg_id).first() #Filter the UserFavoriteGames by user id and the rawg id
+        user_favorite_game.delete() # If there's a match delete it from the UserFavoriteGames model
+        message = 'Game removed from favorites' #Message sent after successful deletion
+        response_status = status.HTTP_200_OK #response status sent back
+    except UserFavoriteGames.DoesNotExist:
+        user_favorite_game = UserFavoriteGames.objects.create(user=user, game=rawg_id) #If the record does not exist, add it to the UserFavoriteGames table
+        user_favorite_game.save() #Save it to UserFavoriteGame model for future use
+        message = 'Game added to favorites' #message sent back after added successfully to favorites
+        response_status = status.HTTP_201_CREATED #response sent back if added to favorites
+    return Response({'message':message}, status=response_status) #See the conditions above
     
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
