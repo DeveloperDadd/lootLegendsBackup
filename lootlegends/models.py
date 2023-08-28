@@ -37,7 +37,6 @@ class Game(models.Model):
         through="UserFavoriteGames"
     )
     game_image_url = models.CharField(max_length = 1000, default="")
-    game_rating = models.CharField(max_length=20, default="...")
     posts = models.ManyToManyField(
         Post,
         through="GamePost"
@@ -48,8 +47,8 @@ class Game(models.Model):
     )
 
 class UserFavoriteGames(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
-    game = models.ForeignKey(Game, on_delete=models.PROTECT)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
 class GameGenre(models.Model):
     game = models.ForeignKey(Game, on_delete=models.PROTECT)
