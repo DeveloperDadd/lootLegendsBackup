@@ -12,7 +12,8 @@
 # below:
 .git
 .gitignore
-
+cloud-sql-proxy/
+google-cloud-sdk/
 # Python pycache:
 __pycache__/
 # Ignored by the build system
